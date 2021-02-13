@@ -1,9 +1,9 @@
-# ts-transformer-keys
+# validation-keys
 A TypeScript custom transformer which enables to obtain keys of given type.
 
-![Build Status](https://github.com/kimamula/ts-transformer-keys/workflows/test/badge.svg)
+![Build Status](https://github.com/malusev998/validation-keys/workflows/test/badge.svg)
 [![NPM version][npm-image]][npm-url]
-[![Downloads](https://img.shields.io/npm/dm/ts-transformer-keys.svg)](https://www.npmjs.com/package/ts-transformer-keys)
+[![Downloads](https://img.shields.io/npm/dm/validation-keys.svg)](https://www.npmjs.com/package/validation-keys)
 
 # Requirement
 TypeScript >= 2.4.1
@@ -11,21 +11,21 @@ TypeScript >= 2.4.1
 # How to use this package
 
 This package exports 2 functions.
-One is `keys` which is used in TypeScript codes to obtain keys of given type, while the other is a TypeScript custom transformer which is used to compile the `keys` function correctly.
+One is `validationKeys` which is used in TypeScript codes to obtain keys of given type, while the other is a TypeScript custom transformer which is used to compile the `validationKeys` function correctly.
 
 ## How to use `keys`
 
 ```ts
-import { keys } from 'ts-transformer-keys';
+import { validationKeys } from 'validation-keys';
 
-interface Props {
-  id: string;
-  name: string;
-  age: number;
+interface PropsValidationError {
+  idError: string;
+  nameError: string;
+  ageError: number;
 }
-const keysOfProps = keys<Props>();
+const validation = validationKeys<Props>();
 
-console.log(keysOfProps); // ['id', 'name', 'age']
+console.log(validation); // {id => 'idError', name => 'nameError', age: 'ageError'}
 ```
 
 ## How to use the custom transformer
@@ -39,7 +39,7 @@ See [examples/webpack](examples/webpack) for detail.
 
 ```js
 // webpack.config.js
-const keysTransformer = require('ts-transformer-keys/transformer').default;
+const keysTransformer = require('validation-keys/transformer').default;
 
 module.exports = {
   // ...
@@ -71,7 +71,7 @@ See [examples/rollup](examples/rollup) for detail.
 // rollup.config.js
 import resolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
-import keysTransformer from 'ts-transformer-keys/transformer';
+import keysTransformer from 'validation-keys/transformer';
 
 export default {
   // ...
@@ -96,7 +96,7 @@ See [ttypescript's README](https://github.com/cevek/ttypescript/blob/master/READ
   "compilerOptions": {
     // ...
     "plugins": [
-      { "transform": "ts-transformer-keys/transformer" }
+      { "transform": "validation-keys/transformer" }
     ]
   },
   // ...
@@ -110,7 +110,7 @@ In order to use this transformer with ts-jest, you need to add a wrapper around 
 
 ```javascript
 // ts-jest-keys-trasnformer.js
-const keysTransformer = require('ts-transformer-keys/transformer').default;
+const keysTransformer = require('validation-keys/transformer').default;
 const name = 'my-key-transformer';
 const version = 1;
 const factory = (cs) => (ctx) => keysTransformer(cs.tsCompiler.program)(ctx);
@@ -137,7 +137,7 @@ You can try it with `$ npm test`.
 
 ```js
 const ts = require('typescript');
-const keysTransformer = require('ts-transformer-keys/transformer').default;
+const keysTransformer = require('validation-keys/transformer').default;
 
 const program = ts.createProgram([/* your files to compile */], {
   strict: true,
@@ -161,7 +161,7 @@ As a result, the TypeScript code shown [here](#how-to-use-keys) is compiled into
 ```js
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ts_transformer_keys_1 = require("ts-transformer-keys");
+var ts_transformer_keys_1 = require("validation-keys");
 var keysOfProps = ["id", "name", "age"];
 console.log(keysOfProps); // ['id', 'name', 'age']
 ```
@@ -183,5 +183,5 @@ class MyClass<T extends object> {
 
 MIT
 
-[npm-image]:https://img.shields.io/npm/v/ts-transformer-keys.svg?style=flat
-[npm-url]:https://npmjs.org/package/ts-transformer-keys
+[npm-image]:https://img.shields.io/npm/v/validation-keys.svg?style=flat
+[npm-url]:https://npmjs.org/package/validation-keys

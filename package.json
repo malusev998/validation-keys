@@ -1,7 +1,7 @@
 {
-  "name": "ts-transformer-keys",
-  "version": "0.4.3",
-  "description": "A TypeScript custom transformer which enables to obtain keys of given type.",
+  "name": "validation-keys",
+  "version": "0.1.0",
+  "description": "",
   "scripts": {
     "prepare": "tsc",
     "prepublishOnly": "npm test",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kimamula/ts-transformer-keys.git"
+    "url": "git+https://github.com/malusev998/validation-keys.git"
   },
   "keywords": [
     "TypeScript"
   ],
-  "author": "kimamula",
+  "author": "malusev998",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kimamula/ts-transformer-keys/issues"
+    "url": "https://github.com/malusev998/validation-keys/issues"
   },
   "files": [
     "index.js",
@@ -25,12 +25,12 @@
     "transformer.js",
     "transformer.ts"
   ],
-  "homepage": "https://github.com/kimamula/ts-transformer-keys#readme",
+  "homepage": "https://github.com/malusev998/validation-keys#readme",
   "devDependencies": {
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.13",
     "mocha": "^8.2.1",
-    "typescript": "^3.9.5"
+    "typescript": "^4.1.5"
   },
   "peerDependencies": {
     "typescript": ">=2.4.1"

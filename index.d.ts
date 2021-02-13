@@ -1,1 +1,1 @@
-export function keys<T extends object>(): Array<keyof T>;
+export function validationKeys<T extends object>(): { [x: string]: string };

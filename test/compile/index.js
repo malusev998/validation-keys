@@ -1,4 +1,5 @@
 const { compile } = require('./compile');
 const path = require('path');
 
-compile([path.join(__dirname, '../index.ts')]);
+const file = path.join(__dirname, "../index.ts");
+compile([file]);

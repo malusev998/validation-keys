@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts, { factory } from 'typescript';
 import path from 'path';
 
 export default function transformer(program: ts.Program): ts.TransformerFactory<ts.SourceFile> {
@@ -13,20 +13,24 @@ function visitNodeAndChildren(node: ts.Node, program: ts.Program, context: ts.Tr
 
 function visitNode(node: ts.SourceFile, program: ts.Program): ts.SourceFile;
 function visitNode(node: ts.Node, program: ts.Program): ts.Node | undefined;
+
+
 function visitNode(node: ts.Node, program: ts.Program): ts.Node | undefined {
   const typeChecker = program.getTypeChecker();
   if (isKeysImportExpression(node)) {
     return;
   }
+
   if (!isKeysCallExpression(node, typeChecker)) {
     return node;
   }
   if (!node.typeArguments) {
-    return ts.createArrayLiteral([]);
+    return factory.createObjectLiteralExpression();
   }
   const type = typeChecker.getTypeFromTypeNode(node.typeArguments[0]);
   const properties = typeChecker.getPropertiesOfType(type);
-  return ts.createArrayLiteral(properties.map(property => ts.createLiteral(property.name)));
+
+  return createValidationObject(properties);
 }
 
 const indexJs = path.join(__dirname, 'index.js');
@@ -41,7 +45,7 @@ function isKeysImportExpression(node: ts.Node): node is ts.ImportDeclaration {
         ? require.resolve(path.resolve(path.dirname(node.getSourceFile().fileName), module))
         : require.resolve(module)
     );
-  } catch(e) {
+  } catch (e) {
     return false;
   }
 }
@@ -52,16 +56,30 @@ function isKeysCallExpression(node: ts.Node, typeChecker: ts.TypeChecker): node 
     return false;
   }
   const declaration = typeChecker.getResolvedSignature(node)?.declaration;
-  if (!declaration || ts.isJSDocSignature(declaration) || declaration.name?.getText() !== 'keys') {
+  if (!declaration || ts.isJSDocSignature(declaration) || declaration.name?.getText() !== 'validationKeys') {
     return false;
   }
   try {
-    // require.resolve is required to resolve symlink.
-    // https://github.com/kimamula/ts-transformer-keys/issues/4#issuecomment-643734716
     return require.resolve(declaration.getSourceFile().fileName) === indexTs;
   } catch {
-    // declaration.getSourceFile().fileName may not be in Node.js require stack and require.resolve may result in an error.
-    // https://github.com/kimamula/ts-transformer-keys/issues/47
     return false;
   }
+}
+
+
+function createValidationObject(properties: Array<ts.Symbol>) {
+  const mapped = properties.map(property => {
+    const pos = property.name.indexOf('Error');
+
+    if (pos === -1) {
+      throw new Error('Validation object property must end with Error. eg. nameError');
+    }
+
+    const name = factory.createStringLiteral(property.name.substring(0, pos));
+    const value = factory.createStringLiteral(property.name);
+
+    return factory.createPropertyAssignment(name, value);
+  });
+
+  return factory.createObjectLiteralExpression(mapped);
 }

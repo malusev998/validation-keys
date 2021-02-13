@@ -1,23 +1,23 @@
-import { keys } from '../../index';
+import { validationKeys } from '../../index';
 
-keys();
+validationKeys();
 
 interface Foo {
-  foo: string;
+  fooError: string;
 }
-const fooKeys = keys<Foo>();
+const fooKeys = validationKeys<Foo>();
 console.log(fooKeys[0]);
 
-type FooBar = Foo & { bar: number; };
-keys<FooBar>()[1];
-type FooBarBaz = FooBar | { bar: Function; baz: Date; };
-const fooBarBazKeys = keys<FooBarBaz>();
-fooBarBazKeys.forEach(key => console.log(key));
+type FooBar = Foo & { barError: number; };
+validationKeys<FooBar>()[1];
+type FooBarBaz = FooBar | { barError: Function; bazError: Date; };
+const fooBarBazKeys = validationKeys<FooBarBaz>();
+Object.keys(fooBarBazKeys).forEach(key => console.log(key));
 
-keys.toString();
+validationKeys.toString();
 
 class MyClass<T extends object> {
   keys() {
-    return keys<T>();
+    return validationKeys<T>();
   }
 }

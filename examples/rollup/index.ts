@@ -1,15 +1,15 @@
-import { keys } from 'ts-transformer-keys';
+import { keys } from 'validation-keys';
 
-keys();
+validationKeys();
 
 interface Foo {
-  foo: string;
+  fooError: string;
 }
-const fooKeys = keys<Foo>();
+const fooKeys = validationKeys<Foo>();
 console.log(fooKeys[0]);
 
-type FooBar = Foo & { bar: number; };
-console.log(keys<FooBar>()[1]);
-type FooBarOrBarBaz = FooBar | { bar: Function; baz: Date; };
-const fooBarOrBarBazKeys = keys<FooBarOrBarBaz>();
-fooBarOrBarBazKeys.forEach(key => console.log(key));
+type FooBar = Foo & { barError: number; };
+console.log(validationKeys<FooBar>()[1]);
+type FooBarOrBarBaz = FooBar | { barError: Function; bazError: Date; };
+const fooBarOrBarBazKeys = validationKeys<FooBarOrBarBaz>();
+Object.keys(fooBarOrBarBazKeys).forEach(key => console.log(key));

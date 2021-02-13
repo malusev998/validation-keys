@@ -1,12 +1,12 @@
-import { keys } from 'ts-transformer-keys';
+import { validationKeys } from 'validation-keys';
 interface Foo {
-  foo: string;
+  fooError: string;
 }
 
 export default class TestClass {
   testMethod(){
-    keys();
-    const fooKeys = keys<Foo>();
+    validationKeys();
+    const fooKeys = validationKeys<Foo>();
     return fooKeys
   }
 }
